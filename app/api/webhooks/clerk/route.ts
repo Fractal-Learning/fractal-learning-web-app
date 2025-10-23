@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 import type { WebhookEvent } from "@clerk/nextjs/server";
@@ -10,10 +9,9 @@ export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   const payload = await req.text();
-  const headerPayload = headers();
-  const svixId = headerPayload.get("svix-id");
-  const svixTimestamp = headerPayload.get("svix-timestamp");
-  const svixSignature = headerPayload.get("svix-signature");
+  const svixId = req.headers.get("svix-id");
+  const svixTimestamp = req.headers.get("svix-timestamp");
+  const svixSignature = req.headers.get("svix-signature");
 
   if (!svixId || !svixTimestamp || !svixSignature) {
     return new NextResponse("Missing svix headers", { status: 400 });
