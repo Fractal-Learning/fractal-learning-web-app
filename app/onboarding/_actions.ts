@@ -1,9 +1,10 @@
 "use server";
 
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { getDb } from "@/lib/db";
+import { getDb } from '@/lib/db';
 import { teacherProfiles } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { getEnv } from "@/lib/env";
 
 export const completeOnboarding = async (formData: FormData) => {
   console.log("[Onboarding] Starting onboarding submission");
@@ -18,7 +19,8 @@ export const completeOnboarding = async (formData: FormData) => {
     }
 
     // Check environment variable
-    if (!process.env.CLERK_SECRET_KEY) {
+    const { CLERK_SECRET_KEY } = getEnv();
+    if (!CLERK_SECRET_KEY) {
       console.error("[Onboarding] Missing CLERK_SECRET_KEY");
       return { error: "Server configuration error: Missing Clerk Secret Key" };
     }

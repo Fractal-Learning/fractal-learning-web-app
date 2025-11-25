@@ -4,6 +4,8 @@ import type { WebhookEvent } from '@clerk/nextjs/server';
 import { getDb } from '@/lib/db';
 import { users, usersPii, organizations } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import { z } from 'zod';
+import { getEnv } from '@/lib/env';
 
 export const runtime = 'nodejs';
 
@@ -17,11 +19,9 @@ export async function POST(req: Request) {
     return new NextResponse('Missing svix headers', { status: 400 });
   }
 
-  const secret = process.env.CLERK_WEBHOOK_SECRET;
-  if (!secret) {
-    return new NextResponse('Missing CLERK_WEBHOOK_SECRET', { status: 500 });
-  }
-  const wh = new Webhook(secret);
+  const { CLERK_WEBHOOK_SECRET } = getEnv();
+
+  const wh = new Webhook(CLERK_WEBHOOK_SECRET);
   let evt: WebhookEvent;
 
   try {
@@ -71,7 +71,6 @@ export async function POST(req: Request) {
         });
 
       // 2. Upsert User PII
-      // 2. Upsert User PII
       const piiData = {
         email: primaryEmail,
         firstName: first_name || null,
@@ -111,13 +110,25 @@ export async function POST(req: Request) {
       const { id, name, slug, public_metadata } = evt.data;
 
       // Extract type and parent_id from metadata if available, otherwise default
-      // Safe casting since we don't strictly verify metadata shape at runtime here
-      const metadata = public_metadata as Record<string, any>;
+      // Validate metadata with Zod to ensure type safety
+      const OrganizationMetadataSchema = z.object({
+        type: z.string().optional(),
+        parent_id: z.string().nullable().optional(),
+      });
+
+      const result = OrganizationMetadataSchema.safeParse(public_metadata);
+
+      if (!result.success) {
+        console.warn('[Webhook] Invalid organization metadata:', result.error);
+      }
+
+      const metadata = result.success ? result.data : {};
+
       const type =
-        metadata?.type === 'district' || metadata?.type === 'school'
+        metadata.type === 'district' || metadata.type === 'school'
           ? metadata.type
           : 'personal';
-      const parentId = metadata?.parent_id || null;
+      const parentId = metadata.parent_id ?? null;
 
       console.log(`[Webhook] Upserting organization: ${id}, type: ${type}`);
 

@@ -1,16 +1,15 @@
-import { SignUp } from "@clerk/nextjs";
+import { SignUp } from '@clerk/nextjs';
 
 export default function Page() {
   return (
     <div className="flex justify-center py-24">
-      <SignUp 
+      <SignUp
         routing="path"
         path="/sign-up"
-        afterSignUpUrl="/dashboard"
         forceRedirectUrl="/dashboard"
         appearance={{
           elements: {
-            rootBox: "mx-auto",
+            rootBox: 'mx-auto',
           },
         }}
       />
