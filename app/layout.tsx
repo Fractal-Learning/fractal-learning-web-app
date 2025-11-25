@@ -42,8 +42,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <ClerkProvider appearance={clerkAppearanceObject}>
-        <body className={`min-h-screen flex flex-col antialiased`}>
+      <ClerkProvider 
+        appearance={clerkAppearanceObject} 
+        afterSignOutUrl="/"
+        afterSignInUrl="/dashboard"
+        afterSignUpUrl="/dashboard"
+      >
+        <body className={`min-h-screen flex flex-col antialiased`} suppressHydrationWarning>
           {children}
         </body>
       </ClerkProvider>
