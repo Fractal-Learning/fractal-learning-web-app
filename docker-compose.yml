@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fractal-postgres-local
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: fractal_user
+      POSTGRES_PASSWORD: fractal_password
+      POSTGRES_DB: fractal_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fractal_user -d fractal_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
