@@ -111,24 +111,21 @@ export async function POST(req: Request) {
 
       // Extract type and parent_id from metadata if available, otherwise default
       // Validate metadata with Zod to ensure type safety
-      const OrganizationMetadataSchema = z.object({
-        type: z.string().optional(),
-        parent_id: z.string().nullable().optional(),
-      });
+      const metadataSchema = z
+        .object({
+          type: z.enum(['district', 'school']).optional(),
+          parent_id: z.string().optional().nullable(),
+        })
+        .loose();
 
-      const result = OrganizationMetadataSchema.safeParse(public_metadata);
+      const parsedMetadata = metadataSchema.safeParse(public_metadata);
 
-      if (!result.success) {
-        console.warn('[Webhook] Invalid organization metadata:', result.error);
-      }
-
-      const metadata = result.success ? result.data : {};
-
-      const type =
-        metadata.type === 'district' || metadata.type === 'school'
-          ? metadata.type
-          : 'personal';
-      const parentId = metadata.parent_id ?? null;
+      const type = parsedMetadata.success
+        ? parsedMetadata.data.type ?? 'personal'
+        : 'personal';
+      const parentId = parsedMetadata.success
+        ? parsedMetadata.data.parent_id ?? null
+        : null;
 
       console.log(`[Webhook] Upserting organization: ${id}, type: ${type}`);
 
