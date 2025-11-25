@@ -23,7 +23,7 @@ export const completeOnboarding = async (formData: FormData) => {
       return { error: "Server configuration error: Missing Clerk Secret Key" };
     }
 
-    const client = await clerkClient();
+    const client = clerkClient;
     console.log("[Onboarding] Clerk client initialized");
     
     const db = getDb();

@@ -40,13 +40,10 @@ export default function OnboardingPage() {
             console.warn("Session reload failed", e);
         }
         
-        console.log("Redirecting to /");
-        router.push("/");
-        
-        // Fallback redirect if router.push is slow
-        setTimeout(() => {
-            window.location.href = "/";
-        }, 1000);
+        console.log("Onboarding complete. Refreshing to trigger redirect...");
+        // router.refresh() re-fetches server components.
+        // The layout will then see the updated session claims and redirect the user.
+        router.refresh();
       }
     } catch (e) {
       console.error("Unexpected client error:", e);
