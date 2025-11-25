@@ -71,23 +71,23 @@ export async function POST(req: Request) {
         });
 
       // 2. Upsert User PII
+      // 2. Upsert User PII
+      const piiData = {
+        email: primaryEmail,
+        firstName: first_name || null,
+        lastName: last_name || null,
+        imageUrl: image_url || null,
+      };
+
       await db
         .insert(usersPii)
         .values({
           userId: id,
-          email: primaryEmail,
-          firstName: first_name || null,
-          lastName: last_name || null,
-          imageUrl: image_url || null,
+          ...piiData,
         })
         .onConflictDoUpdate({
           target: usersPii.userId,
-          set: {
-            email: primaryEmail,
-            firstName: first_name || null,
-            lastName: last_name || null,
-            imageUrl: image_url || null,
-          },
+          set: piiData,
         });
 
       console.log(`[Webhook] Successfully upserted user: ${id}`);
