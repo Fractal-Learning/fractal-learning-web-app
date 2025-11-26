@@ -1,5 +1,6 @@
 import { SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Footer } from './_template/components/footer';
 
 export default function Home() {
@@ -9,6 +10,16 @@ export default function Home() {
         <div className="w-full bg-white max-w-300 mx-auto flex-1 flex flex-col border-l border-r border-[#F2F2F2] relative">
           <div className="flex-1 flex items-center justify-center p-10 relative z-10">
             <div className="w-full max-w-lg text-center space-y-6">
+              <div className="flex justify-center mb-8">
+                <Image
+                  src="/fractal_logo.png"
+                  alt="Fractal Learning Logo"
+                  width={120}
+                  height={120}
+                  priority
+                />
+              </div>
+
               <h1 className="text-5xl font-bold tracking-tight text-[#131316]">
                 Welcome to Fractal Learning
               </h1>
@@ -21,14 +32,14 @@ export default function Home() {
                 <SignedIn>
                   <Link
                     href="/dashboard"
-                    className="px-6 py-3 rounded-full bg-[#131316] text-white text-sm font-semibold hover:bg-[#2a2a2a] active:bg-[#1a1a1a] active:scale-95 transition-all duration-200 hover:scale-105 cursor-pointer"
+                    className="px-6 py-3 rounded-full bg-[#6c47ff] text-white text-sm font-semibold hover:bg-[#5639cc] active:bg-[#4b32b2] active:scale-95 transition-all duration-200 hover:scale-105 cursor-pointer"
                   >
                     Go to Dashboard
                   </Link>
                 </SignedIn>
                 <SignedOut>
                   <SignUpButton>
-                    <button className="px-6 py-3 rounded-full bg-[#131316] text-white text-sm font-semibold hover:bg-[#2a2a2a] active:bg-[#1a1a1a] active:scale-95 transition-all duration-200 hover:scale-105 cursor-pointer">
+                    <button className="px-6 py-3 rounded-full bg-[#6c47ff] text-white text-sm font-semibold hover:bg-[#5639cc] active:bg-[#4b32b2] active:scale-95 transition-all duration-200 hover:scale-105 cursor-pointer">
                       Sign up
                     </button>
                   </SignUpButton>
@@ -37,7 +48,7 @@ export default function Home() {
                     Already have an account?{' '}
                     <Link
                       href="/sign-in"
-                      className="text-[#131316] font-semibold hover:underline active:text-[#2a2a2a] transition-colors cursor-pointer"
+                      className="text-[#6c47ff] font-semibold hover:underline active:text-[#5639cc] transition-colors cursor-pointer"
                     >
                       Sign in
                     </Link>

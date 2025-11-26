@@ -1,0 +1,38 @@
+# Security Best Practices
+
+You are an expert in Next.js and web security. Always enforce the following security rules when generating or reviewing code.
+
+## 1. Authentication & Authorization
+- **Server-Side Verification**: ALL Server Actions and Route Handlers (`app/api/...`) MUST verify authentication state using Clerk's `auth()` or `currentUser()` before performing any sensitive operations.
+  ```typescript
+  import { auth } from "@clerk/nextjs/server";
+  
+  export async function myAction() {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+    // ... proceed
+  }
+  ```
+- **Middleware Protection**: Ensure `middleware.ts` is configured to protect private routes and only allow public access to specifically designated paths (e.g., sign-in, sign-up, landing page).
+- **Role-Based Access**: If the application uses roles, verify roles immediately after authentication checks.
+
+## 2. Data Validation & Input Sanitization
+- **Zod Validation**: ALL user inputs (forms, API bodies, query params) MUST be validated using Zod schemas. Never trust `req.body` or function arguments directly from the client.
+- **Sanitization**: Avoid rendering user-generated content directly. If necessary, use a sanitization library (like `dompurify`) before rendering HTML.
+- **No Dangerous HTML**: strictly avoid `dangerouslySetInnerHTML` unless absolutely necessary and heavily sanitized.
+
+## 3. Database Security (Drizzle ORM)
+- **Parameterization**: Always use Drizzle ORM's query builder methods (e.g., `db.select()...`, `db.insert()...`) which handle parameterization automatically.
+- **No Raw SQL Injection**: Avoid using raw SQL strings with interpolated variables. If `sql` template literal is needed, ensure variables are passed as parameters, not concatenated strings.
+
+## 4. Secrets & Environment Variables
+- **No Hardcoded Secrets**: NEVER commit API keys, tokens, or secrets to the codebase.
+- **Environment Access**: Use the type-safe environment variables helper (e.g., `lib/env.ts`) to access secrets. Do not use `process.env` directly if a typed wrapper exists.
+- **Client vs Server**: Ensure sensitive variables are NOT prefixed with `NEXT_PUBLIC_` unless they are truly safe to be exposed to the browser.
+
+## 5. Dependency Security
+- **Audit Awareness**: When adding new dependencies, ensure they are reputable and maintained. Suggest running `npm audit` if suspicious packages are encountered.
+
+## 6. General Security Headers & Config
+- Ensure `next.config.ts` headers are configured for security (X-Content-Type-Options, X-Frame-Options, etc.) where applicable.
+- Avoid exposing stack traces in production error responses.

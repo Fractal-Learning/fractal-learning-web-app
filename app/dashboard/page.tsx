@@ -1,5 +1,6 @@
 import { SignOutButton } from '@clerk/nextjs';
 import { currentUser } from '@clerk/nextjs/server';
+import Image from 'next/image';
 
 export default async function DashboardPage() {
   // Middleware already handles authentication protection
@@ -7,8 +8,18 @@ export default async function DashboardPage() {
   const userName = user?.firstName || user?.username || 'there';
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-[#FAFAFA]">
       <div className="max-w-md w-full text-center space-y-6">
+        <div className="flex justify-center mb-8">
+          <Image
+            src="/fractal_logo.png"
+            alt="Fractal Learning Logo"
+            width={120}
+            height={120}
+            priority
+          />
+        </div>
+
         <h1 className="text-4xl font-bold text-gray-900">
           Welcome to Fractal Learning
           {userName !== 'there' ? `, ${userName}` : ''}!
@@ -20,7 +31,7 @@ export default async function DashboardPage() {
 
         <div className="pt-8">
           <SignOutButton>
-            <button className="bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+            <button className="bg-[#6c47ff] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#5639cc] transition-colors">
               Logout
             </button>
           </SignOutButton>
