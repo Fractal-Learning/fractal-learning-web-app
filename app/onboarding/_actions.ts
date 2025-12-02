@@ -130,9 +130,7 @@ export const completeOnboarding = async (formData: FormData) => {
     }
   } catch (err) {
     console.error('[Onboarding] Global Error:', err);
-    if (err instanceof Error) {
-      return { error: `Error: ${err.message}` };
-    }
-    return { error: 'There was an unknown error updating the user profile.' };
+    // Return a generic error message to the user, but log the specific error on the server
+    return { error: 'There was an error updating your profile. Please try again.' };
   }
 };
