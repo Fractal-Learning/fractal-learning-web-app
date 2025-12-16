@@ -2,8 +2,16 @@ import { SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Footer } from './_template/components/footer';
+import { PasswordProtection } from './components/password-protection';
+import { checkPasswordVerification } from './_actions';
 
-export default function Home() {
+export default async function Home() {
+  const isVerified = await checkPasswordVerification();
+
+  if (!isVerified) {
+    return <PasswordProtection />;
+  }
+
   return (
     <>
       <main className="bg-[#FAFAFA] min-h-screen flex flex-col relative">
