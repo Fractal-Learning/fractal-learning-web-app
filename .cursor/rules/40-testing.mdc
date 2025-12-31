@@ -1,7 +1,8 @@
 ---
 description: Testing strategy and patterns (Vitest/Vite for unit tests, Playwright for E2E).
 globs:
-  - "**/*.{ts,tsx}"
+  - "app/**/*.{ts,tsx}"
+  - "lib/**/*.{ts,tsx}"
   - "**/*.{test,spec}.{ts,tsx}"
   - "tests/**/*"
   - "playwright.config.{ts,js}"
@@ -46,7 +47,7 @@ alwaysApply: true
   - Don’t use arbitrary timeouts; wait for explicit UI states.
 
 ### Suggested repo conventions (when tests are added)
-- **Unit/integration**: `src`-adjacent `*.test.ts(x)` or `tests/unit/**`.
+- **Unit/integration**: **source-adjacent** `*.test.ts(x)` (next to code in `app/` or `lib/`) or `tests/unit/**`.
 - **E2E**: `tests/e2e/**` with Playwright config at repo root.
 - Add scripts such as `pnpm test` (vitest) and `pnpm test:e2e` (playwright) when setting up CI.
 
