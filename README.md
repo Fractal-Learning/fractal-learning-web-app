@@ -69,6 +69,10 @@ To learn more about Clerk and Next.js, check out the following resources:
 - [Clerk Documentation](https://go.clerk.com/aNiTioa)
 - [Next.js Documentation](https://nextjs.org/docs)
 
+## Data sources
+
+See `docs/data-sources.md`.
+
 ## Found an issue or have feedback?
 
 If you have found an issue with this repo or have feedback, please join our Discord and create a new thread inside of our [support](https://clerk.com/discord) channel.

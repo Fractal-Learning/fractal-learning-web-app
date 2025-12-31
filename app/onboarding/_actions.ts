@@ -9,7 +9,14 @@ import { z } from 'zod';
 
 const onboardingSchema = z.object({
   schoolName: z.string().min(1, 'School name is required.'),
-  state: z.string().min(1, 'State is required.'),
+  state: z
+    .string()
+    .trim()
+    .min(1, 'State is required.')
+    .transform((val) => val.toUpperCase())
+    .refine((val) => /^[A-Z]{2}$/.test(val), {
+      message: 'State must be a valid 2-letter code.',
+    }),
   grades: z.array(z.string()).min(1, 'Please select at least one grade.'),
   yearsExperience: z
     .string()
